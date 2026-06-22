@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { API_BASE_URL } from '../../config';
 
 @Component({
   selector: 'app-support',
@@ -34,7 +35,7 @@ export class SupportComponent implements OnInit {
   }
 
   fetchTickets() {
-    fetch(`http://localhost:3000/support/tickets/user/${this.currentUser.id}`)
+    fetch(`${API_BASE_URL}/support/tickets/user/${this.currentUser.id}`)
       .then(res => res.json())
       .then((data: any[]) => {
         this.myTickets = data;
@@ -55,7 +56,7 @@ export class SupportComponent implements OnInit {
       message: this.message
     };
 
-    fetch('http://localhost:3000/support/tickets', {
+    fetch(`${API_BASE_URL}/support/tickets`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -77,7 +78,7 @@ export class SupportComponent implements OnInit {
     this.chatbotMessages.push({ sender: 'user', text: userText, time: new Date() });
     this.userMessage = '';
 
-    fetch('http://localhost:3000/support/chatbot', {
+    fetch(`${API_BASE_URL}/support/chatbot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: userText })

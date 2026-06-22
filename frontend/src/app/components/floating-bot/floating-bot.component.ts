@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { API_BASE_URL } from '../../config';
 
 @Component({
   selector: 'app-floating-bot',
@@ -30,7 +31,7 @@ export class FloatingBotComponent implements OnInit {
     this.userMessage = '';
     
     // Call backend API
-    fetch('http://localhost:3000/support/chatbot', {
+    fetch(`${API_BASE_URL}/support/chatbot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: userText })

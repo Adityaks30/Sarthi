@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { API_BASE_URL } from '../../config';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -33,31 +34,31 @@ export class AdminDashboardComponent implements OnInit {
 
   fetchData() {
     // 1. Fetch Stats
-    fetch('http://localhost:3000/admin/stats')
+    fetch(`${API_BASE_URL}/admin/stats`)
       .then(res => res.json())
       .then(data => this.stats = data)
       .catch(err => console.error('Error fetching admin stats:', err));
 
     // 2. Fetch Users
-    fetch('http://localhost:3000/admin/users')
+    fetch(`${API_BASE_URL}/admin/users`)
       .then(res => res.json())
       .then(data => this.users = data)
       .catch(err => console.error('Error fetching users:', err));
 
     // 3. Fetch Drivers
-    fetch('http://localhost:3000/admin/drivers')
+    fetch(`${API_BASE_URL}/admin/drivers`)
       .then(res => res.json())
       .then(data => this.drivers = data)
       .catch(err => console.error('Error fetching drivers:', err));
 
     // 4. Fetch Bookings
-    fetch('http://localhost:3000/admin/bookings')
+    fetch(`${API_BASE_URL}/admin/bookings`)
       .then(res => res.json())
       .then(data => this.bookings = data)
       .catch(err => console.error('Error fetching bookings:', err));
 
     // 5. Fetch Analytics
-    fetch('http://localhost:3000/admin/analytics/earnings')
+    fetch(`${API_BASE_URL}/admin/analytics/earnings`)
       .then(res => res.json())
       .then(data => this.earningsAnalytics = data)
       .catch(err => console.error('Error fetching earnings analytics:', err));

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { API_BASE_URL } from '../../config';
 
 @Component({
   selector: 'app-auth',
@@ -55,7 +56,7 @@ export class AuthComponent {
       ? { phone: this.loginPhone, isOtpLogin: true }
       : { email: this.loginEmail, password: this.loginPassword };
 
-    fetch('http://localhost:3000/auth/login', {
+    fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -90,7 +91,7 @@ export class AuthComponent {
       referralCode: this.signupReferralCode || undefined
     };
 
-    fetch('http://localhost:3000/auth/signup', {
+    fetch(`${API_BASE_URL}/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -118,7 +119,7 @@ export class AuthComponent {
       otp: this.otpVal
     };
 
-    fetch('http://localhost:3000/auth/verify-otp', {
+    fetch(`${API_BASE_URL}/auth/verify-otp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -142,7 +143,7 @@ export class AuthComponent {
 
     if (!this.resetSent) {
       // First request: generate token
-      fetch('http://localhost:3000/auth/forgot-password', {
+      fetch(`${API_BASE_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: this.forgotEmail, isForgotRequest: true })
@@ -160,7 +161,7 @@ export class AuthComponent {
       });
     } else {
       // Second request: reset password
-      fetch('http://localhost:3000/auth/reset-password', {
+      fetch(`${API_BASE_URL}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: this.forgotEmail, token: this.resetToken, newPassword: this.newPassword })

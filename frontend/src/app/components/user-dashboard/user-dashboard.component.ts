@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { API_BASE_URL } from '../../config';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -52,16 +53,20 @@ export class UserDashboardComponent implements OnInit {
       this.currentUser = JSON.parse(cachedUser);
     }
 
+    // Load custom notifications from local storage and prepend them
+    const localNotifs = JSON.parse(localStorage.getItem('sarthi_notifications') || '[]');
+    this.notifications = [...localNotifs, ...this.notifications];
+
     // Fetch booking history from NestJS
-    fetch('http://localhost:3000/admin/bookings')
+    fetch(`${API_BASE_URL}/admin/bookings`)
       .then(res => res.json())
       .then((data: any[]) => {
-        this.bookings = data.filter(b => b.userId === this.currentUser.id || b.userId === 'test-client-id');
+        this.bookings = data.filter(b => b.userId === this.currentUser.id || b.userId === 'test-client-id' || b.userId === '00000000-0000-0000-0000-000000000000');
       })
       .catch(err => console.error('Error fetching bookings:', err));
 
     // Fetch payments history from NestJS
-    fetch('http://localhost:3000/payments/history')
+    fetch(`${API_BASE_URL}/payments/history`)
       .then(res => res.json())
       .then((data: any[]) => {
         this.payments = data;

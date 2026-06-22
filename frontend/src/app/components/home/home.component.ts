@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { io, Socket } from 'socket.io-client';
 import { RouterLink } from '@angular/router';
+import { API_BASE_URL, SOCKET_URL } from '../../config';
 
 @Component({
   selector: 'app-home',
@@ -82,9 +83,18 @@ export class HomeComponent implements OnInit {
     { name: 'Aditya Sen', rating: 4.9, trips: 640, language: 'English, Bengali, Hindi', reviews: 'Luxury chauffeur style, extremely professional.', avatar: '👨✈️' }
   ];
 
+  // Payment Method Selection
+  selectedPaymentMethod: 'UPI' | 'CASH' = 'UPI';
+  upiId = 'adityakashyap2515@oksbi';
+
   ngOnInit(): void {
+    // Request notification permission
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+
     // Connect to WebSocket gateway
-    this.socket = io('http://localhost:3000');
+    this.socket = io(SOCKET_URL);
     
     this.socket.on('connect', () => {
       console.log('Connected to simulation WebSocket server');
@@ -97,6 +107,26 @@ export class HomeComponent implements OnInit {
         this.activeBookingStatus = data.status;
         if (data.driver) {
           this.matchedDriver = data.driver;
+        }
+
+        // Add real notification
+        const statusNotif = {
+          id: Math.random().toString(36).substring(2, 9),
+          title: `Booking Status: ${data.status}`,
+          message: data.status === 'ACCEPTED' 
+            ? `Your ride request has been accepted by ${data.driver?.name || 'a driver'}.` 
+            : `Your ride status is now ${data.status}.`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        const existingNotifs = JSON.parse(localStorage.getItem('sarthi_notifications') || '[]');
+        existingNotifs.unshift(statusNotif);
+        localStorage.setItem('sarthi_notifications', JSON.stringify(existingNotifs));
+
+        // Trigger system notification
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(`Sarthi: Ride ${data.status}`, {
+            body: data.status === 'ACCEPTED' ? `Driver ${data.driver?.name || ''} is on the way!` : `Status: ${data.status}`,
+          });
         }
       }
     });
@@ -240,7 +270,7 @@ export class HomeComponent implements OnInit {
     }
 
     // Call backend API to create the booking
-    fetch('http://localhost:3000/bookings', {
+    fetch(`${API_BASE_URL}/bookings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.pendingBookingBody)
@@ -250,12 +280,51 @@ export class HomeComponent implements OnInit {
       this.activeBookingId = booking.id;
       this.activeBookingStatus = booking.status;
       
+      // Save notification to localStorage for dashboard
+      const newNotif = {
+        id: Math.random().toString(36).substring(2, 9),
+        title: 'Booking Placed',
+        message: `Your booking for ${booking.startAddress} has been successfully requested.`,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      const existingNotifs = JSON.parse(localStorage.getItem('sarthi_notifications') || '[]');
+      existingNotifs.unshift(newNotif);
+      localStorage.setItem('sarthi_notifications', JSON.stringify(existingNotifs));
+
+      // Trigger browser notification
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Sarthi: Booking Placed!', {
+          body: `Your ride is pending driver acceptance.`,
+        });
+      } else {
+        alert(`Booking Placed successfully!\nStatus: PENDING\nMethod: ${this.selectedPaymentMethod}`);
+      }
+
+      // Record the payment details in NestJS
+      fetch(`${API_BASE_URL}/payments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bookingId: booking.id,
+          amount: fare,
+          method: this.selectedPaymentMethod
+        })
+      })
+      .then(pres => pres.json())
+      .then(payment => {
+        console.log('Payment recorded successfully:', payment);
+      })
+      .catch(perr => {
+        console.error('Error recording payment:', perr);
+      });
+      
       // Join WebSocket room for updates
       this.socket.emit('join_booking', { bookingId: booking.id });
       this.wizardStep = 3; // Go to simulation dashboard step
     })
     .catch(err => {
       console.error('Error creating booking:', err);
+      alert('Failed to place booking. Please check database connection.');
     });
   }
 

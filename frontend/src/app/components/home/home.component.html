@@ -214,6 +214,45 @@
           </div>
         </div>
 
+        <!-- Select Payment Method -->
+        <div class="space-y-3">
+          <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Select Payment Method</label>
+          <div class="grid grid-cols-2 gap-3.5">
+            <!-- UPI Option -->
+            <div (click)="selectedPaymentMethod = 'UPI'" 
+                 [class.border-amber-500]="selectedPaymentMethod === 'UPI'" 
+                 [class.bg-amber-500\/5]="selectedPaymentMethod === 'UPI'"
+                 [class.border-white\/5]="selectedPaymentMethod !== 'UPI'"
+                 class="p-4 rounded-2xl border bg-slate-950 hover:bg-white/[0.02] cursor-pointer transition-all flex flex-col justify-between h-28 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="text-white text-xs font-black">UPI / Scan & Pay</span>
+                <span *ngIf="selectedPaymentMethod === 'UPI'" class="text-amber-500 text-[10px]">●</span>
+              </div>
+              <p class="text-[9px] text-slate-500">Pay using GPay, PhonePe, Paytm, or BHIM.</p>
+              <div class="pt-1 flex flex-col">
+                <span class="text-[9px] font-mono text-slate-400 truncate">{{ upiId }}</span>
+                <span class="text-[8px] text-amber-500 font-bold hover:underline cursor-pointer">Copy UPI ID</span>
+              </div>
+            </div>
+
+            <!-- COD Option -->
+            <div (click)="selectedPaymentMethod = 'CASH'" 
+                 [class.border-amber-500]="selectedPaymentMethod === 'CASH'" 
+                 [class.bg-amber-500\/5]="selectedPaymentMethod === 'CASH'"
+                 [class.border-white\/5]="selectedPaymentMethod !== 'CASH'"
+                 class="p-4 rounded-2xl border bg-slate-950 hover:bg-white/[0.02] cursor-pointer transition-all flex flex-col justify-between h-28 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="text-white text-xs font-black">Cash on Delivery</span>
+                <span *ngIf="selectedPaymentMethod === 'CASH'" class="text-amber-500 text-[10px]">●</span>
+              </div>
+              <p class="text-[9px] text-slate-500 font-medium">Pay cash/card to driver directly after ride.</p>
+              <div class="pt-1">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[8px] font-bold">Safe & Reliable</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Pay Gateway action -->
         <div class="flex gap-3">
           <button (click)="wizardStep = 1" class="flex-1 py-3.5 rounded-xl border border-white/10 hover:bg-white/5 text-white text-xs font-bold transition-all cursor-pointer">
