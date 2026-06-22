@@ -110,12 +110,17 @@ export class HomeComponent implements OnInit {
         }
 
         // Add real notification
+        let messageText = `Your ride status is now ${data.status}.`;
+        if (data.status === 'ACCEPTED') {
+          messageText = `Your ride request has been accepted by ${data.driver?.name || 'a driver'}.`;
+        } else if (data.status === 'COMPLETED') {
+          messageText = `Your ride has completed successfully. Thank you for riding with Sarthi!`;
+        }
+        
         const statusNotif = {
           id: Math.random().toString(36).substring(2, 9),
           title: `Booking Status: ${data.status}`,
-          message: data.status === 'ACCEPTED' 
-            ? `Your ride request has been accepted by ${data.driver?.name || 'a driver'}.` 
-            : `Your ride status is now ${data.status}.`,
+          message: messageText,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         const existingNotifs = JSON.parse(localStorage.getItem('sarthi_notifications') || '[]');
@@ -126,6 +131,50 @@ export class HomeComponent implements OnInit {
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification(`Sarthi: Ride ${data.status}`, {
             body: data.status === 'ACCEPTED' ? `Driver ${data.driver?.name || ''} is on the way!` : `Status: ${data.status}`,
+          });
+        }
+
+        // Payment completed notification on completion
+        if (data.status === 'COMPLETED') {
+          const payNotif = {
+            id: Math.random().toString(36).substring(2, 9),
+            title: 'Payment Successful',
+            message: `Payment of ₹${this.getCurrentFare()} completed via ${this.selectedPaymentMethod}.`,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          const existing = JSON.parse(localStorage.getItem('sarthi_notifications') || '[]');
+          existing.unshift(payNotif);
+          localStorage.setItem('sarthi_notifications', JSON.stringify(existing));
+
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification('Sarthi: Payment Successful!', {
+              body: `Payment of ₹${this.getCurrentFare()} has been processed.`,
+            });
+          }
+        }
+      }
+    });
+
+    this.socket.on('booking:driver_matched', (data: any) => {
+      console.log('Driver matched update:', data);
+      if (data.bookingId === this.activeBookingId) {
+        this.matchedDriver = data.driver;
+        
+        // Add notification
+        const matchNotif = {
+          id: Math.random().toString(36).substring(2, 9),
+          title: 'Driver Found',
+          message: `${data.driver.name} is ready to accept your ride. Accept the ride to start.`,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        const existingNotifs = JSON.parse(localStorage.getItem('sarthi_notifications') || '[]');
+        existingNotifs.unshift(matchNotif);
+        localStorage.setItem('sarthi_notifications', JSON.stringify(existingNotifs));
+
+        // Trigger browser notification
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('Sarthi: Driver Found!', {
+            body: `${data.driver.name} is offering to accept your ride.`,
           });
         }
       }
@@ -326,6 +375,21 @@ export class HomeComponent implements OnInit {
       console.error('Error creating booking:', err);
       alert('Failed to place booking. Please check database connection.');
     });
+  }
+
+  acceptBooking() {
+    if (this.activeBookingId) {
+      console.log('Accepting booking:', this.activeBookingId);
+      this.socket.emit('accept_booking', { bookingId: this.activeBookingId });
+    }
+  }
+
+  rejectBooking() {
+    if (this.activeBookingId) {
+      console.log('Rejecting booking:', this.activeBookingId);
+      this.socket.emit('reject_booking', { bookingId: this.activeBookingId });
+      this.resetBooking();
+    }
   }
 
   resetBooking() {

@@ -173,14 +173,14 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       profile = await this.driverProfileRepository.save(profile);
     }
 
-    // Accept Booking
+    // Match Driver to booking (but keep status PENDING)
     booking.driverId = mockDriverUser.id;
-    booking.status = BookingStatus.ACCEPTED;
+    booking.status = BookingStatus.PENDING;
     await this.bookingRepository.save(booking);
 
-    this.server.to(`booking_${bookingId}`).emit('booking:status_changed', {
+    // Emit driver_matched to user
+    this.server.to(`booking_${bookingId}`).emit('booking:driver_matched', {
       bookingId,
-      status: BookingStatus.ACCEPTED,
       driver: {
         name: mockDriverUser.name,
         phone: mockDriverUser.phone,
@@ -193,22 +193,85 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         } : null
       },
     });
+  }
 
-    // Start simulation route update interval
+  @SubscribeMessage('accept_booking')
+  async handleAcceptBooking(
+    @MessageBody() data: { bookingId: string },
+  ) {
+    console.log(`Accept booking received: ${data.bookingId}`);
+    const booking = await this.bookingRepository.findOne({ where: { id: data.bookingId } });
+    if (!booking) return;
+
+    booking.status = BookingStatus.ACCEPTED;
+    await this.bookingRepository.save(booking);
+
+    const driver = await this.userRepository.findOne({ where: { id: booking.driverId } });
+    const profile = await this.driverProfileRepository.findOne({
+      where: { userId: booking.driverId },
+      relations: { vehicle: true },
+    });
+
+    this.server.to(`booking_${data.bookingId}`).emit('booking:status_changed', {
+      bookingId: data.bookingId,
+      status: BookingStatus.ACCEPTED,
+      driver: driver ? {
+        name: driver.name,
+        phone: driver.phone,
+        rating: profile?.rating || 4.8,
+        vehicle: profile?.vehicle ? {
+          make: profile.vehicle.make,
+          model: profile.vehicle.model,
+          licensePlate: profile.vehicle.licensePlate,
+          category: profile.vehicle.category
+        } : null
+      } : null,
+    });
+
+    if (profile) {
+      this.startTelemetryLoop(booking, profile);
+    }
+  }
+
+  @SubscribeMessage('reject_booking')
+  async handleRejectBooking(
+    @MessageBody() data: { bookingId: string },
+  ) {
+    console.log(`Reject booking received: ${data.bookingId}`);
+    const booking = await this.bookingRepository.findOne({ where: { id: data.bookingId } });
+    if (!booking) return;
+
+    booking.status = BookingStatus.CANCELLED;
+    await this.bookingRepository.save(booking);
+
+    this.server.to(`booking_${data.bookingId}`).emit('booking:status_changed', {
+      bookingId: data.bookingId,
+      status: BookingStatus.CANCELLED,
+    });
+  }
+
+  async startTelemetryLoop(booking: Booking, profile: DriverProfile) {
     const coordinates = booking.routeCoordinates || [];
     if (coordinates.length === 0) return;
 
     let currentStep = 0;
     const intervalId = setInterval(async () => {
+      // Reload booking to check if cancelled mid-simulation
+      const currentBooking = await this.bookingRepository.findOne({ where: { id: booking.id } });
+      if (!currentBooking || currentBooking.status === BookingStatus.CANCELLED) {
+        clearInterval(intervalId);
+        return;
+      }
+
       if (currentStep >= coordinates.length) {
         clearInterval(intervalId);
 
         // Mark ride as completed
-        booking.status = BookingStatus.COMPLETED;
-        await this.bookingRepository.save(booking);
+        currentBooking.status = BookingStatus.COMPLETED;
+        await this.bookingRepository.save(currentBooking);
 
-        this.server.to(`booking_${bookingId}`).emit('booking:status_changed', {
-          bookingId,
+        this.server.to(`booking_${booking.id}`).emit('booking:status_changed', {
+          bookingId: booking.id,
           status: BookingStatus.COMPLETED,
         });
         return;
@@ -219,13 +282,13 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       profile.longitude = point.lng;
       await this.driverProfileRepository.save(profile);
 
-      this.server.to(`booking_${bookingId}`).emit('driver:location_updated', {
-        bookingId,
+      this.server.to(`booking_${booking.id}`).emit('driver:location_updated', {
+        bookingId: booking.id,
         latitude: point.lat,
         longitude: point.lng,
       });
 
       currentStep++;
-    }, 2000); // update every 2 seconds
+    }, 2000);
   }
 }

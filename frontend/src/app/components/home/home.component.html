@@ -287,8 +287,45 @@
           </div>
         </div>
 
-        <!-- Matched Driver Box -->
-        <div *ngIf="matchedDriver" class="p-4 bg-slate-950 border border-white/5 rounded-2xl space-y-3.5">
+        <!-- Interactive Driver Match Card (for Accept/Reject) -->
+        <div *ngIf="matchedDriver && activeBookingStatus === 'PENDING'" class="p-5 bg-slate-950 border border-amber-500/20 rounded-2xl space-y-4 shadow-xl">
+          <div class="flex justify-between items-center text-[8px] font-extrabold text-amber-500 uppercase tracking-wider">
+            <span>Incoming Ride Offer</span>
+            <span>⭐ {{ matchedDriver.rating }}</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">👨‍✈️</span>
+            <div>
+              <span class="block text-xs font-black text-white">{{ matchedDriver.name }}</span>
+              <span class="block text-[10px] text-slate-500 mt-0.5">{{ matchedDriver.phone }}</span>
+            </div>
+          </div>
+          
+          <div class="p-3.5 bg-white/[0.02] rounded-xl border border-white/5 space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Vehicle:</span>
+              <span class="font-bold text-white">{{ matchedDriver.vehicle?.make }} {{ matchedDriver.vehicle?.model }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Fare offered:</span>
+              <span class="font-black text-emerald-400">₹{{ getCurrentFare() }}</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-2.5 pt-1">
+            <button (click)="rejectBooking()" class="flex-1 py-2.5 rounded-xl border border-red-500/20 hover:bg-red-500/5 text-red-400 text-xs font-bold transition-all cursor-pointer">
+              Reject
+            </button>
+            <button (click)="acceptBooking()" class="flex-[2] py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md">
+              Accept Ride
+            </button>
+          </div>
+        </div>
+
+        <!-- Matched Driver Box (Once Accepted) -->
+        <div *ngIf="matchedDriver && activeBookingStatus !== 'PENDING'" class="p-4 bg-slate-950 border border-white/5 rounded-2xl space-y-3.5">
           <div class="flex justify-between items-center text-[8px] font-extrabold text-slate-500 uppercase tracking-wider">
             <span>Your Driver Contact</span>
             <span class="text-amber-500">⭐ {{ matchedDriver.rating }}</span>
