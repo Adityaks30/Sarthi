@@ -22,13 +22,17 @@ import { SupportModule } from './support/support.module.js';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'Ksaditya11',
-      database: 'taxi_db',
+      url: process.env.DATABASE_URL,
+      ...(process.env.DATABASE_URL ? {} : {
+        host: process.env.DB_HOST ?? 'localhost',
+        port: parseInt(process.env.DB_PORT ?? '5432', 10),
+        username: process.env.DB_USERNAME ?? 'postgres',
+        password: process.env.DB_PASSWORD ?? 'Ksaditya11',
+        database: process.env.DB_DATABASE ?? 'taxi_db',
+      }),
       entities: [User, Vehicle, DriverProfile, Booking, Payment, SupportTicket],
       synchronize: true, // Auto-create tables in development
+      ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
     }),
     TypeOrmModule.forFeature([User, Vehicle, DriverProfile, Booking, Payment, SupportTicket]),
     AuthModule,
