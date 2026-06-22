@@ -1,0 +1,24 @@
+<div class="taxi-app-container pt-6">
+
+  <main style="padding: 2.5rem 3rem;">
+    <div class="dashboard-container">
+      <h3 class="dashboard-title">My Favorite Drivers</h3>
+  <div class="favorite-drivers-grid">
+    <div *ngFor="let driver of favoriteDrivers" class="driver-card" [class.offline]="driver.status === 'Offline'">
+      <div class="avatar-status-container">
+        <span class="driver-avatar">{{ driver.avatar }}</span>
+        <span class="status-indicator-dot" [class.online]="driver.status === 'Online'"></span>
+      </div>
+      <div class="driver-details">
+        <h4 class="driver-name">{{ driver.name }}</h4>
+        <div class="driver-rating">⭐ {{ driver.rating }}</div>
+        <div class="driver-phone">{{ driver.phone }}</div>
+        <div class="status-badge" [class.online]="driver.status === 'Online'">
+          {{ driver.status }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+</div>

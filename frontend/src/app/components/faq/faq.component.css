@@ -1,0 +1,11 @@
+.faq-answer-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  opacity: 0;
+}
+
+.faq-answer-container.open {
+  max-height: 250px; /* high enough limit for content */
+  opacity: 1;
+}

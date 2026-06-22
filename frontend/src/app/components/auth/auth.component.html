@@ -1,0 +1,182 @@
+<div class="min-height-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950/20 p-6 font-sans">
+  <div class="w-full max-w-5xl bg-slate-900/60 backdrop-blur-xl border border-white/5 rounded-3xl overflow-hidden shadow-2xl grid md:grid-cols-2">
+    <!-- Branding Left Column -->
+    <div class="hidden md:flex flex-col justify-between p-12 bg-gradient-to-br from-amber-500/10 to-transparent border-r border-white/5">
+      <div class="flex items-center gap-2">
+        <span class="text-3xl">🚖</span>
+        <span class="text-2xl font-black tracking-tight text-white">Sar<span class="text-amber-500">thi</span></span>
+      </div>
+      <div>
+        <h1 class="text-4xl font-black text-white leading-tight mb-4">Your premium ride, just a click away.</h1>
+        <p class="text-slate-400 text-sm leading-relaxed">Book instant cabs, hourly rentals, and luxury chauffeur services with live tracking and loyalty rewards.</p>
+      </div>
+      <div class="text-xs text-slate-500 font-semibold">© 2026 Sarthi Taxi Service. All rights reserved.</div>
+    </div>
+
+    <!-- Forms Right Column -->
+    <div class="p-8 md:p-12 flex flex-col justify-center">
+      <!-- Success/Error Alerts -->
+      <div *ngIf="errorMessage" class="mb-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-450 text-xs font-semibold">
+        ⚠️ {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="mb-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+        ✅ {{ successMessage }}
+      </div>
+
+      <!-- Login Form -->
+      <div *ngIf="authMode === 'login'" class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-black text-white">Welcome back</h2>
+          <p class="text-slate-400 text-xs mt-1">Choose your preferred login mode below.</p>
+        </div>
+
+        <!-- Login Tabs -->
+        <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1.5 rounded-xl border border-white/5">
+          <button (click)="isOtpLogin = false" [class.bg-white\/10]="!isOtpLogin" class="py-2 text-xs font-bold rounded-lg text-white transition-all">Password</button>
+          <button (click)="isOtpLogin = true" [class.bg-white\/10]="isOtpLogin" class="py-2 text-xs font-bold rounded-lg text-white transition-all">OTP SMS</button>
+        </div>
+
+        <!-- Password Mode -->
+        <form (submit)="handleLogin()" class="space-y-4" *ngIf="!isOtpLogin">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Email Address</label>
+            <input type="email" [(ngModel)]="loginEmail" name="loginEmail" placeholder="you@example.com" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Password</label>
+            <input type="password" [(ngModel)]="loginPassword" name="loginPassword" placeholder="••••••••" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div class="flex justify-end">
+            <button type="button" (click)="switchMode('forgot')" class="text-amber-500 text-xs font-bold hover:underline">Forgot password?</button>
+          </div>
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl shadow-lg shadow-amber-500/10 transition-all cursor-pointer">Sign In</button>
+        </form>
+
+        <!-- OTP Mode -->
+        <form (submit)="handleLogin()" class="space-y-4" *ngIf="isOtpLogin">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Phone Number</label>
+            <input type="tel" [(ngModel)]="loginPhone" name="loginPhone" placeholder="+91 98765 43210" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl shadow-lg shadow-amber-500/10 transition-all cursor-pointer">Send Verification Code</button>
+        </form>
+
+        <!-- Social Login -->
+        <div class="space-y-4">
+          <div class="flex items-center my-4">
+            <hr class="flex-1 border-white/5" />
+            <span class="px-3 text-[10px] uppercase font-bold text-slate-600">Or continue with</span>
+            <hr class="flex-1 border-white/5" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button (click)="mockSocialLogin('Google')" class="flex items-center justify-center gap-2 py-3 border border-white/5 bg-slate-950/50 hover:bg-slate-950 text-xs text-white font-bold rounded-xl transition-colors cursor-pointer">
+              <span>🌐</span> Google
+            </button>
+            <button (click)="mockSocialLogin('Facebook')" class="flex items-center justify-center gap-2 py-3 border border-white/5 bg-slate-950/50 hover:bg-slate-950 text-xs text-white font-bold rounded-xl transition-colors cursor-pointer">
+              <span>📘</span> Facebook
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center text-xs text-slate-400 mt-6">
+          Don't have an account? 
+          <button (click)="switchMode('signup')" class="text-amber-500 font-bold hover:underline">Sign up</button>
+        </div>
+      </div>
+
+      <!-- Signup Form -->
+      <div *ngIf="authMode === 'signup'" class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-black text-white">Create an account</h2>
+          <p class="text-slate-400 text-xs mt-1">Start your swift journey with us today.</p>
+        </div>
+
+        <form (submit)="handleSignup()" class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Full Name</label>
+            <input type="text" [(ngModel)]="signupName" name="signupName" placeholder="Aditya Kashyap" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Email Address</label>
+            <input type="email" [(ngModel)]="signupEmail" name="signupEmail" placeholder="you@example.com" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Phone Number</label>
+            <input type="tel" [(ngModel)]="signupPhone" name="signupPhone" placeholder="+91 98765 43210" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Password</label>
+            <input type="password" [(ngModel)]="signupPassword" name="signupPassword" placeholder="••••••••" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Referral Code (Optional)</label>
+            <input type="text" [(ngModel)]="signupReferralCode" name="signupReferralCode" placeholder="ADITYA99" class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl shadow-lg shadow-amber-500/10 transition-all cursor-pointer">Register</button>
+        </form>
+
+        <div class="text-center text-xs text-slate-400 mt-6">
+          Already have an account? 
+          <button (click)="switchMode('login')" class="text-amber-500 font-bold hover:underline">Log in</button>
+        </div>
+      </div>
+
+      <!-- OTP Verification Form -->
+      <div *ngIf="authMode === 'otp'" class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-black text-white">Enter Verification Code</h2>
+          <p class="text-slate-400 text-xs mt-1">We've simulated an SMS to {{ loginPhone }}.</p>
+        </div>
+
+        <form (submit)="handleVerifyOtp()" class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">6-Digit OTP</label>
+            <input type="text" [(ngModel)]="otpVal" name="otpVal" placeholder="123456" maxlength="6" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white text-center tracking-widest font-mono focus:outline-none focus:border-amber-500" />
+          </div>
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl shadow-lg shadow-amber-500/10 transition-all cursor-pointer">Verify & Login</button>
+        </form>
+
+        <div class="text-center text-xs text-slate-400 mt-6">
+          Didn't get the code? 
+          <button (click)="isOtpLogin = true; handleLogin()" class="text-amber-500 font-bold hover:underline">Resend Code</button>
+        </div>
+      </div>
+
+      <!-- Forgot Password Form -->
+      <div *ngIf="authMode === 'forgot'" class="space-y-6">
+        <div>
+          <h2 class="text-2xl font-black text-white">Reset Password</h2>
+          <p class="text-slate-400 text-xs mt-1">Set a new password for your account.</p>
+        </div>
+
+        <form (submit)="handleForgotPassword()" class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Email Address</label>
+            <input type="email" [(ngModel)]="forgotEmail" name="forgotEmail" placeholder="you@example.com" [disabled]="resetSent" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+
+          <!-- Fields after token generation -->
+          <div *ngIf="resetSent" class="space-y-4">
+            <div>
+              <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Reset Token</label>
+              <input type="text" [(ngModel)]="resetToken" name="resetToken" placeholder="Enter Token" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">New Password</label>
+              <input type="password" [(ngModel)]="newPassword" name="newPassword" placeholder="••••••••" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+            </div>
+          </div>
+
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl shadow-lg shadow-amber-500/10 transition-all cursor-pointer">
+            {{ resetSent ? 'Confirm New Password' : 'Send Reset Link' }}
+          </button>
+        </form>
+
+        <div class="text-center text-xs text-slate-400 mt-6">
+          Remember your password? 
+          <button (click)="switchMode('login')" class="text-amber-500 font-bold hover:underline">Back to Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

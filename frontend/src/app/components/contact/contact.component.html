@@ -1,0 +1,121 @@
+<div class="min-h-screen bg-slate-950 text-slate-100 font-sans py-12 px-6 lg:px-24">
+  <div class="max-w-6xl mx-auto space-y-16">
+    <!-- Header Section -->
+    <div class="text-center space-y-4">
+      <span class="text-amber-500 text-xs font-black tracking-widest uppercase">Get In Touch</span>
+      <h1 class="text-4xl font-black tracking-tight text-white">Contact Sarthi Support</h1>
+      <p class="text-slate-400 text-sm max-w-xl mx-auto leading-relaxed">
+        Whether you have questions about custom booking quotes, corporate accounts, or active ride issues, our experts are here to help.
+      </p>
+    </div>
+
+    <!-- Contact details and form layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <!-- Contact details & Map side -->
+      <div class="space-y-8">
+        <div class="bg-slate-900/40 border border-white/5 p-8 rounded-3xl backdrop-blur-md space-y-6">
+          <h3 class="text-sm font-extrabold uppercase text-slate-400 tracking-wider">Corporate Headquarters</h3>
+          
+          <div class="space-y-4 text-xs">
+            <div class="flex items-start gap-3">
+              <span class="text-lg">📍</span>
+              <div>
+                <strong class="text-white block mb-0.5">Office Address</strong>
+                <span class="text-slate-400">{{ officeDetails.address }}</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <span class="text-lg">📞</span>
+              <div>
+                <strong class="text-white block mb-0.5">Phone Line</strong>
+                <span class="text-slate-400 font-mono">{{ officeDetails.phone }}</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <span class="text-lg">✉️</span>
+              <div>
+                <strong class="text-white block mb-0.5">Email Support</strong>
+                <a href="mailto:{{ officeDetails.email }}" class="text-amber-500 hover:underline">{{ officeDetails.email }}</a>
+              </div>
+            </div>
+
+            <!-- WhatsApp Consultation Box -->
+            <div class="flex items-start gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
+              <span class="text-xl">💬</span>
+              <div>
+                <strong class="text-emerald-400 block mb-0.5">WhatsApp Expert Consultation</strong>
+                <span class="text-slate-450 block mb-2">Speak directly with a support agent for booking assistance or corporate packages.</span>
+                <a [href]="'https://wa.me/' + officeDetails.whatsapp.replace(' ', '').replace('+', '')" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-full transition-all">
+                  <span>Talk to an Expert</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social links -->
+          <div class="pt-4 border-t border-white/5">
+            <span class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-3">Follow Us</span>
+            <div class="flex gap-3 text-xs">
+              <a href="#" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-amber-500 hover:text-slate-950 transition-all font-semibold">Twitter</a>
+              <a href="#" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-amber-500 hover:text-slate-950 transition-all font-semibold">LinkedIn</a>
+              <a href="#" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-amber-500 hover:text-slate-950 transition-all font-semibold">Facebook</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Styled Map visual container -->
+        <div class="bg-slate-900/40 border border-white/5 p-4 rounded-3xl backdrop-blur-md overflow-hidden h-64 relative">
+          <!-- Simulation map visual container -->
+          <div class="absolute inset-0 bg-slate-950 opacity-40"></div>
+          <!-- Custom iframe layout style placeholder -->
+          <iframe 
+            [src]="getSafeUrl(officeDetails.mapsIframe)" 
+            class="w-full h-full border-0 grayscale invert opacity-75 rounded-2xl" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- Form side -->
+      <div class="bg-slate-900/40 border border-white/5 p-8 rounded-3xl backdrop-blur-md space-y-6">
+        <h3 class="text-sm font-extrabold uppercase text-slate-450 tracking-wider border-l-4 border-amber-500 pl-2">Send Message</h3>
+
+        <form (submit)="submitContact()" class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Your Name *</label>
+            <input type="text" [(ngModel)]="contactName" name="contactName" placeholder="John Doe" required class="w-full bg-slate-950 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-650 focus:outline-none focus:border-amber-500" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Email Address *</label>
+              <input type="email" [(ngModel)]="contactEmail" name="contactEmail" placeholder="john@example.com" required class="w-full bg-slate-950 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-650 focus:outline-none focus:border-amber-500" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Phone Number</label>
+              <input type="text" [(ngModel)]="contactPhone" name="contactPhone" placeholder="+91 98765 43210" class="w-full bg-slate-950 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-650 focus:outline-none focus:border-amber-500" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Subject</label>
+            <input type="text" [(ngModel)]="contactSubject" name="contactSubject" placeholder="Booking query / Quote Request" class="w-full bg-slate-950 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-650 focus:outline-none focus:border-amber-500" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Detailed Message *</label>
+            <textarea [(ngModel)]="contactMessage" name="contactMessage" rows="5" placeholder="How can we assist you today? Please supply booking IDs if applicable." required class="w-full bg-slate-950 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-650 focus:outline-none focus:border-amber-500"></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl shadow-lg transition-all cursor-pointer">
+            Send Inquiry Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

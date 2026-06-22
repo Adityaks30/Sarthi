@@ -1,0 +1,17 @@
+/* Custom Admin Dashboard styles */
+.text-rose-450 {
+  color: #fb7185;
+}
+
+.text-emerald-450 {
+  color: #34d399;
+}
+
+.text-emerald-400 {
+  color: #10b981;
+}
+
+/* Ensure bars transition height smoothly on load */
+.bg-gradient-to-t {
+  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+}

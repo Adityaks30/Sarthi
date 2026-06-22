@@ -1,0 +1,92 @@
+<div class="min-h-screen pt-6">
+
+  <!-- Main Support Grid -->
+  <main class="max-w-7xl mx-auto px-12 py-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Left Column: AI Chatbot -->
+    <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md flex flex-col h-[550px]">
+      <div class="flex justify-between items-center pb-4 border-b border-white/5 mb-4">
+        <div>
+          <h3 class="text-sm font-extrabold uppercase text-slate-400 tracking-wider">AI Support Chatbot</h3>
+          <p class="text-[10px] text-slate-500 mt-1">Get instant automated answers about Sarthi.</p>
+        </div>
+        <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[9px] font-bold uppercase">Online</span>
+      </div>
+
+      <!-- Chat Log area -->
+      <div class="flex-1 overflow-y-auto space-y-3.5 pr-2 mb-4 scrollbar-thin">
+        <div *ngFor="let msg of chatbotMessages" class="flex" [class.justify-end]="msg.sender === 'user'">
+          <div class="max-w-[80%] p-3.5 rounded-2xl text-xs leading-relaxed"
+            [class.bg-slate-800]="msg.sender === 'bot'"
+            [class.text-slate-200]="msg.sender === 'bot'"
+            [class.bg-amber-500]="msg.sender === 'user'"
+            [class.text-slate-950]="msg.sender === 'user'">
+            {{ msg.text }}
+            <span class="block text-[8px] text-right mt-1.5 opacity-60">{{ msg.time | date:'shortTime' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Input -->
+      <form (submit)="sendMessageToBot()" class="flex gap-2">
+        <input type="text" [(ngModel)]="userMessage" name="userMessage" placeholder="Ask about cancellations, refunds, payments..." class="flex-1 bg-slate-950 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+        <button type="submit" class="px-5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl transition-colors cursor-pointer">Send</button>
+      </form>
+    </div>
+
+    <!-- Right Column: Support Tickets -->
+    <div class="space-y-6">
+      <!-- Create Ticket Form -->
+      <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+        <h3 class="text-sm font-extrabold uppercase text-slate-450 tracking-wider border-l-4 border-amber-500 pl-2">Submit Support Ticket</h3>
+        
+        <form (submit)="sendTicket()" class="space-y-4">
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Category</label>
+            <select [(ngModel)]="category" name="category" class="w-full bg-slate-950 border border-white/5 rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-amber-500">
+              <option value="Booking Issue">Booking Issue</option>
+              <option value="Payment Delay">Payment Delay</option>
+              <option value="Driver Misbehavior">Driver Misbehavior</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Subject</label>
+            <input type="text" [(ngModel)]="subject" name="subject" placeholder="Brief summary of the issue" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-2">Detailed Message</label>
+            <textarea [(ngModel)]="message" name="message" placeholder="Provide as much detail as possible..." rows="4" required class="w-full bg-slate-950/50 border border-white/5 rounded-xl p-3.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-500"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs uppercase tracking-wider py-4 rounded-xl shadow-lg transition-all cursor-pointer">Submit Helpdesk Ticket</button>
+        </form>
+      </div>
+
+      <!-- My Tickets list -->
+      <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+        <h3 class="text-sm font-extrabold uppercase text-slate-500 tracking-wider">My Support Tickets</h3>
+
+        <div class="space-y-3" *ngIf="myTickets.length > 0">
+          <div *ngFor="let t of myTickets" class="p-4 bg-slate-950/40 rounded-2xl border border-white/5">
+            <div class="flex justify-between items-center">
+              <span class="px-2 py-0.5 rounded bg-slate-800 text-slate-400 text-[9px] font-extrabold uppercase">{{ t.category }}</span>
+              <span class="text-[10px] font-bold"
+                [class.text-amber-500]="t.status === 'OPEN'"
+                [class.text-emerald-400]="t.status === 'RESOLVED'">
+                {{ t.status }}
+              </span>
+            </div>
+            <h4 class="text-xs font-extrabold text-white mt-2">{{ t.subject }}</h4>
+            <p class="text-slate-400 text-xs mt-1">{{ t.message }}</p>
+            <div class="p-3 bg-slate-900/60 rounded-xl mt-3 text-xs border border-white/5" *ngIf="t.adminReply">
+              <span class="block text-[8px] font-extrabold text-slate-500 uppercase tracking-wider">Admin Reply</span>
+              <p class="text-slate-300 mt-1">{{ t.adminReply }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="text-center py-6 text-slate-500 text-xs" *ngIf="myTickets.length === 0">
+          No support tickets created yet.
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

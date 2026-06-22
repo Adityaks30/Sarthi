@@ -1,0 +1,731 @@
+/* Modern Premium Taxi Service Style Guide */
+
+.taxi-app-container {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Header Navbar Styles */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 4px 6px rgba(245, 158, 11, 0.4));
+}
+
+.logo-text .highlight {
+  color: #f59e0b;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-btn.active, .nav-btn:hover {
+  background: #f59e0b;
+  color: #0f172a;
+  border-color: #f59e0b;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+/* Main Content Layout */
+.app-main-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2.5rem;
+  padding: 2.5rem 3rem;
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .app-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar Wizard Card Styles */
+.wizard-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+  border-left: 4px solid #f59e0b;
+  padding-left: 0.75rem;
+}
+
+.mode-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 0.35rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.input-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.category-select-btn {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem;
+  color: #cbd5e1;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-select-btn.selected, .category-select-btn:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+  color: #fff;
+}
+
+.text-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem;
+  color: #fff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.text-input:focus {
+  border-color: #f59e0b;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.primary-action-btn, .pay-btn {
+  width: 100%;
+  background: #f59e0b;
+  color: #0f172a;
+  border: none;
+  border-radius: 14px;
+  padding: 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2);
+}
+
+.primary-action-btn:hover, .pay-btn:hover {
+  background: #fbbf24;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.35);
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Vehicle card styles for rentals */
+.vehicle-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.vehicle-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.vehicle-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(15, 23, 42, 0.5);
+  transform: scale(1.01);
+}
+
+.vehicle-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.vehicle-avatar {
+  font-size: 2.2rem;
+}
+
+.vehicle-name {
+  display: block;
+  font-weight: 700;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.vehicle-meta {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.price-val {
+  display: block;
+  font-weight: 900;
+  color: #10b981;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  text-align: right;
+}
+
+/* Step 2 summary card style edits from prompt */
+.p-4 {
+  padding: 1rem;
+}
+.bg-amber-500\/5 {
+  background-color: rgba(245, 158, 11, 0.05);
+}
+.border-amber-500\/10 {
+  border-color: rgba(245, 158, 11, 0.1);
+}
+.border {
+  border-width: 1px;
+  border-style: solid;
+}
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+.flex {
+  display: flex;
+}
+.items-center {
+  align-items: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.block {
+  display: block;
+}
+.text-\[8px\] {
+  font-size: 8px;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+.text-slate-400 {
+  color: #94a3b8;
+}
+.font-bold {
+  font-weight: 700;
+}
+.text-xs {
+  font-size: 0.75rem;
+}
+.font-black {
+  font-weight: 900;
+}
+.text-black {
+  color: #0f172a;
+}
+.dark\:text-white {
+  color: #fff;
+}
+.text-slate-500 {
+  color: #64748b;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.text-slate-505 {
+  color: #cbd5e1;
+}
+.text-right {
+  text-align: right;
+}
+.text-lg {
+  font-size: 1.125rem;
+}
+.text-emerald-600 {
+  color: #059669;
+}
+.dark\:text-emerald-450 {
+  color: #34d399;
+}
+.bg-slate-50 {
+  background-color: #f8fafc;
+}
+.dark\:bg-slate-900 {
+  background-color: rgba(15, 23, 42, 0.6);
+}
+.border-slate-200 {
+  border-color: #e2e8f0;
+}
+.dark\:border-slate-800 {
+  border-color: #1e293b;
+}
+.space-y-3 > * + * {
+  margin-top: 0.75rem;
+}
+.font-extrabold {
+  font-weight: 800;
+}
+.tracking-widest {
+  letter-spacing: 0.1em;
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.gap-3 {
+  gap: 0.75rem;
+}
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+.w-full {
+  width: 100%;
+}
+.bg-white {
+  background-color: #fff;
+}
+.dark\:bg-slate-950 {
+  background-color: #020617;
+}
+.p-2\.5 {
+  padding: 0.625rem;
+}
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.text-3xl {
+  font-size: 1.875rem;
+}
+.text-center {
+  text-align: center;
+}
+.bg-emerald-500\/5 {
+  background-color: rgba(16, 185, 129, 0.05);
+}
+.border-emerald-500\/10 {
+  border-color: rgba(16, 185, 129, 0.1);
+}
+.text-emerald-600 {
+  color: #059669;
+}
+.dark\:text-emerald-450, .dark\:text-emerald-400 {
+  color: #34d399;
+}
+
+/* Simulation Live Dashboard */
+.booking-id-tag {
+  background: rgba(255, 255, 255, 0.05);
+  font-family: monospace;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-tracker {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.status-indicator.accepted {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.status-indicator.completed {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.pulse-ring {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  display: inline-block;
+  animation: pulse-animation 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-animation {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.rating-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+
+.coords-box {
+  background: rgba(15, 23, 42, 0.4);
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.coords-box .title {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.coords-box .val {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #38bdf8;
+}
+
+.reset-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Right Section Display Area */
+.main-content-display {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Map Simulation Box styling */
+.map-simulation-card {
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(15, 23, 42, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.map-status {
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.location-pulse {
+  font-size: 0.75rem;
+  color: #34d399;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.location-pulse::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  display: inline-block;
+  animation: pulse-animation 1.5s infinite;
+}
+
+.map-body {
+  height: 380px;
+  background-color: #0b0f19;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Simulated Grid Line Map Overlay */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 1s ease-in-out;
+  z-index: 10;
+}
+
+.pin-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+.pin-label {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  margin-top: 0.25rem;
+  white-space: nowrap;
+}
+
+.no-sim-msg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
+}
+
+.message-text {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.85rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Drivers Pool Roster Table/Grid Card */
+.drivers-roster-card {
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2rem;
+}
+
+.roster-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+.roster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.roster-driver-card {
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.roster-driver-card:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(15, 23, 42, 0.5);
+  transform: translateY(-2px);
+}
+
+.driver-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.driver-avatar {
+  font-size: 1.8rem;
+}
+
+.driver-rating {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+}
+
+.driver-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.25rem 0;
+}
+
+.driver-trips {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+
+.driver-langs {
+  display: block;
+  font-size: 0.7rem;
+  color: #38bdf8;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.driver-reviews {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+  font-style: italic;
+  line-height: 1.4;
+}

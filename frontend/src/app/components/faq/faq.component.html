@@ -1,0 +1,32 @@
+<div class="min-h-screen bg-slate-950 text-slate-100 font-sans py-12 px-6 lg:px-24">
+  <div class="max-w-4xl mx-auto space-y-12">
+    <!-- Header Section -->
+    <div class="text-center space-y-4">
+      <span class="text-amber-500 text-xs font-black tracking-widest uppercase">FAQ Support</span>
+      <h1 class="text-4xl font-black tracking-tight text-white">Frequently Asked Questions</h1>
+      <p class="text-slate-400 text-sm max-w-lg mx-auto leading-relaxed">
+        Got questions? We have answers. Find everything you need to know about booking, fare calculation, cancellations, and driver guidelines.
+      </p>
+    </div>
+
+    <!-- FAQ Accordion List -->
+    <div class="space-y-4 pt-6">
+      <div *ngFor="let faq of faqs; let idx = index" class="border border-white/5 bg-slate-900/40 rounded-2xl overflow-hidden backdrop-blur-md transition-all">
+        <!-- Question Header -->
+        <button (click)="toggleFaq(idx)" class="w-full flex justify-between items-center p-6 text-left hover:bg-slate-900/60 transition-colors focus:outline-none">
+          <span class="text-xs font-extrabold text-white tracking-wide">{{ faq.question }}</span>
+          <span class="text-amber-500 text-sm font-bold transition-transform duration-350" [style.transform]="faq.open ? 'rotate(180deg)' : 'rotate(0)'">
+            ▼
+          </span>
+        </button>
+
+        <!-- Answer Content -->
+        <div class="faq-answer-container" [class.open]="faq.open">
+          <div class="p-6 pt-0 text-slate-400 text-xs leading-relaxed border-t border-white/5">
+            {{ faq.answer }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

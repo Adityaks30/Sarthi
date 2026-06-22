@@ -1,0 +1,50 @@
+/* Global Transitions and custom theme resets */
+:host {
+  display: block;
+}
+
+/* Float buttons hover animations */
+a[href*="wa.me"] {
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+}
+
+a[href*="wa.me"]:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 30px -5px rgba(16, 185, 129, 0.6);
+}
+
+/* Light mode styles override */
+body.light-mode {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+body.dark-mode {
+  background-color: #020617 !important;
+  color: #f8fafc !important;
+}
+
+/* Active links custom styling */
+nav a {
+  position: relative;
+  transition: color 0.2s ease-in-out;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #f59e0b;
+  transition: width 0.2s ease-in-out;
+}
+
+nav a.text-amber-500::after {
+  width: 100%;
+}
+
+nav a:hover::after {
+  width: 100%;
+}

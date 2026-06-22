@@ -1,0 +1,194 @@
+<div class="min-h-screen flex flex-col transition-colors duration-300" 
+     [class.bg-slate-950]="isDarkMode" [class.text-slate-100]="isDarkMode"
+     [class.bg-slate-50]="!isDarkMode" [class.text-slate-900]="!isDarkMode">
+  
+  <!-- Global Navigation Header -->
+  <header class="sticky top-0 z-50 border-b backdrop-blur-md transition-all duration-300"
+          [class.bg-slate-900/85]="isDarkMode" [class.border-white/5]="isDarkMode"
+          [class.bg-white/85]="!isDarkMode" [class.border-slate-200]="!isDarkMode">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex justify-between items-center">
+      <!-- Logo -->
+      <a routerLink="/" class="flex items-center gap-2 cursor-pointer focus:outline-none">
+        <span class="text-2xl">🚖</span>
+        <span class="text-xl font-black tracking-tight"
+              [class.text-white]="isDarkMode" [class.text-slate-950]="!isDarkMode">
+          Sar<span class="text-amber-500">thi</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+        <a routerLink="/" class="hover:text-amber-500 transition-colors" [class.text-amber-500]="currentUrl === '/' || currentUrl === ''">Book Ride</a>
+        <a routerLink="/about" class="hover:text-amber-500 transition-colors" [class.text-amber-500]="currentUrl === '/about'">About Us</a>
+        <a routerLink="/faq" class="hover:text-amber-500 transition-colors" [class.text-amber-500]="currentUrl === '/faq'">FAQs</a>
+        <a routerLink="/contact" class="hover:text-amber-500 transition-colors" [class.text-amber-500]="currentUrl === '/contact'">Contact</a>
+        <a routerLink="/support" class="hover:text-amber-500 transition-colors" [class.text-amber-500]="currentUrl === '/support'">AI Support</a>
+        <a routerLink="/dashboard" *ngIf="currentUser" class="hover:text-amber-500 transition-colors" [class.text-amber-500]="currentUrl === '/dashboard'">Dashboard</a>
+        <a routerLink="/admin" *ngIf="currentUser && currentUser.role === 'ADMIN'" class="hover:text-amber-500 transition-colors text-amber-500" [class.text-amber-500]="currentUrl === '/admin'">Admin</a>
+      </nav>
+
+      <!-- Action Buttons (Theme, Auth, Mobile Menu Toggle) -->
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle Button -->
+        <button (click)="toggleTheme()" class="p-2.5 rounded-full border transition-all cursor-pointer text-xs"
+                [class.border-white/10]="isDarkMode" [class.hover:bg-slate-800]="isDarkMode"
+                [class.border-slate-200]="!isDarkMode" [class.hover:bg-slate-100]="!isDarkMode"
+                title="Toggle Dark/Light Mode">
+          {{ isDarkMode ? '☀️' : '🌙' }}
+        </button>
+
+        <!-- Auth Button -->
+        <ng-container *ngIf="!currentUser; else userMenu">
+          <a routerLink="/auth" class="hidden sm:inline-block px-5 py-2.5 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold uppercase tracking-wider transition-all shadow-md shadow-amber-500/10 cursor-pointer">
+            Sign In
+          </a>
+        </ng-container>
+        <ng-template #userMenu>
+          <div class="hidden sm:flex items-center gap-3">
+            <span class="text-xs font-semibold" [class.text-slate-400]="isDarkMode" [class.text-slate-650]="!isDarkMode">
+              Hello, {{ currentUser.name }}
+            </span>
+            <button (click)="handleLogout()" class="px-4 py-2 rounded-full border border-red-500/20 text-red-500 text-xs font-semibold hover:bg-red-500/10 transition-all cursor-pointer">
+              Logout
+            </button>
+          </div>
+        </ng-template>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button (click)="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-full border transition-all cursor-pointer text-xs"
+                [class.border-white/10]="isDarkMode" [class.hover:bg-slate-800]="isDarkMode"
+                [class.border-slate-200]="!isDarkMode" [class.hover:bg-slate-100]="!isDarkMode">
+          ☰
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div *ngIf="mobileMenuOpen" class="lg:hidden border-t px-6 py-4 flex flex-col gap-4 text-xs font-bold uppercase tracking-wider transition-all duration-300"
+         [class.bg-slate-900]="isDarkMode" [class.border-white/5]="isDarkMode"
+         [class.bg-white]="!isDarkMode" [class.border-slate-200]="!isDarkMode">
+      <a routerLink="/" class="hover:text-amber-500 transition-colors py-1.5" [class.text-amber-500]="currentUrl === '/'">Book Ride</a>
+      <a routerLink="/about" class="hover:text-amber-500 transition-colors py-1.5" [class.text-amber-500]="currentUrl === '/about'">About Us</a>
+      <a routerLink="/faq" class="hover:text-amber-500 transition-colors py-1.5" [class.text-amber-500]="currentUrl === '/faq'">FAQs</a>
+      <a routerLink="/contact" class="hover:text-amber-500 transition-colors py-1.5" [class.text-amber-500]="currentUrl === '/contact'">Contact</a>
+      <a routerLink="/support" class="hover:text-amber-500 transition-colors py-1.5" [class.text-amber-500]="currentUrl === '/support'">AI Support</a>
+      <a routerLink="/dashboard" *ngIf="currentUser" class="hover:text-amber-500 transition-colors py-1.5" [class.text-amber-500]="currentUrl === '/dashboard'">Dashboard</a>
+      <a routerLink="/admin" *ngIf="currentUser && currentUser.role === 'ADMIN'" class="hover:text-amber-500 transition-colors text-amber-500 py-1.5" [class.text-amber-500]="currentUrl === '/admin'">Admin</a>
+      
+      <!-- Mobile Auth Action -->
+      <div class="sm:hidden border-t pt-4 flex flex-col gap-3">
+        <ng-container *ngIf="!currentUser; else mobileUserMenu">
+          <a routerLink="/auth" class="w-full text-center py-3 rounded-xl bg-amber-500 text-slate-950 text-xs font-bold uppercase cursor-pointer">
+            Sign In
+          </a>
+        </ng-container>
+        <ng-template #mobileUserMenu>
+          <div class="flex flex-col gap-2">
+            <span class="text-xs font-semibold" [class.text-slate-450]="isDarkMode" [class.text-slate-600]="!isDarkMode">
+              User: {{ currentUser.name }}
+            </span>
+            <button (click)="handleLogout()" class="w-full py-2.5 rounded-xl border border-red-500/20 text-red-500 text-xs font-semibold hover:bg-red-500/10 cursor-pointer">
+              Logout
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </header>
+
+  <!-- Router Outlet Content Area -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Global Footer Section -->
+  <footer class="border-t py-12 px-6 lg:px-12 transition-all duration-300 text-xs leading-relaxed"
+          [class.bg-slate-950]="isDarkMode" [class.border-white/5]="isDarkMode" [class.text-slate-500]="isDarkMode"
+          [class.bg-slate-100]="!isDarkMode" [class.border-slate-200]="!isDarkMode" [class.text-slate-650]="!isDarkMode">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- About/Branding Column -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🚖</span>
+          <span class="text-base font-black tracking-tight"
+                [class.text-white]="isDarkMode" [class.text-slate-950]="!isDarkMode">
+            Sar<span class="text-amber-500">thi</span>
+          </span>
+        </div>
+        <p class="max-w-xs text-[11px] leading-relaxed">
+          Sarthi is Delhi NCR's premier mobility portal. We offer smart outstation cabs, daily rentals, and self-drive cars under zero cancellation policies.
+        </p>
+        <p class="text-[10px] opacity-75 font-semibold">
+          CIN: U60230KA2026PTC192837<br/>
+          Sarthi Mobility Solutions Pvt. Ltd.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="space-y-3">
+        <h4 class="font-extrabold uppercase tracking-widest text-[10px]"
+            [class.text-slate-355]="isDarkMode" [class.text-slate-800]="!isDarkMode">
+          Quick Links
+        </h4>
+        <ul class="space-y-2">
+          <li><a routerLink="/" class="hover:text-amber-500 transition-colors">Book A Ride</a></li>
+          <li><a routerLink="/about" class="hover:text-amber-500 transition-colors">About Founders</a></li>
+          <li><a routerLink="/faq" class="hover:text-amber-500 transition-colors">FAQs Help</a></li>
+          <li><a routerLink="/contact" class="hover:text-amber-500 transition-colors">Contact Details</a></li>
+          <li><a routerLink="/support" class="hover:text-amber-500 transition-colors">AI Assistant Bot</a></li>
+        </ul>
+      </div>
+
+      <!-- Fleet Categories -->
+      <div class="space-y-3">
+        <h4 class="font-extrabold uppercase tracking-widest text-[10px]"
+            [class.text-slate-355]="isDarkMode" [class.text-slate-800]="!isDarkMode">
+          Our Services
+        </h4>
+        <ul class="space-y-2">
+          <li>Airport Transfers</li>
+          <li>Local Taxi Service</li>
+          <li>Outstation Cab Trips</li>
+          <li>Corporate Travel Plans</li>
+          <li>Wedding Car Rental</li>
+          <li>Self-Drive EV Fleets</li>
+        </ul>
+      </div>
+
+      <!-- Contact details & Socials -->
+      <div class="space-y-3">
+        <h4 class="font-extrabold uppercase tracking-widest text-[10px]"
+            [class.text-slate-355]="isDarkMode" [class.text-slate-800]="!isDarkMode">
+          Support Contact
+        </h4>
+        <ul class="space-y-2 text-[11px]">
+          <li>📞 +91 82879 92549</li>
+          <li>💬 WhatsApp: +91 82879 92549</li>
+          <li>✉️ nextvision&#64;gmail.com</li>
+          <li>📍 Kalindi Kunj Metro Station, New Delhi, Delhi - 110025</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright and Legal -->
+    <div class="max-w-7xl mx-auto pt-8 mt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] opacity-75"
+         [class.border-white/5]="isDarkMode" [class.border-slate-200]="!isDarkMode">
+      <span>&copy; 2026 Sarthi Taxi Service. All rights reserved.</span>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-amber-500">Privacy Policy</a>
+        <a href="#" class="hover:text-amber-500">Terms &amp; Conditions</a>
+        <a href="#" class="hover:text-amber-500">Sitemap</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Expert Chat Button -->
+  <a href="https://wa.me/918287992549" target="_blank" 
+     class="fixed bottom-6 right-6 z-55 flex items-center justify-center w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-2xl hover:scale-105 transition-all duration-200 cursor-pointer"
+     title="Talk to a Booking Expert">
+    <!-- WhatsApp icon SVG -->
+    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.403.002 9.803-4.381 9.806-9.761.002-2.605-1.002-5.054-2.831-6.883C16.398 2.13 13.96 1.127 12.01 1.127c-5.409 0-9.81 4.384-9.814 9.766-.002 1.77.464 3.5 1.348 5.025l-.995 3.634 3.738-.979l-.24-.13zM15.77 12.87c-.287-.144-1.696-.837-1.958-.933-.262-.096-.452-.144-.642.144-.19.288-.737.933-.903 1.125-.167.192-.334.216-.621.072-2.846-1.424-4.708-3.52-5.41-4.723-.287-.492.29-.456.83-1.52.09-.18.045-.337-.022-.48-.068-.144-.57-1.373-.78-1.881-.205-.494-.41-.426-.57-.434l-.48-.008c-.167 0-.44.062-.67.311-.23.25-.877.855-.877 2.086 0 1.23.896 2.417 1.018 2.585.12.168 1.762 2.69 4.27 3.774.597.258 1.064.412 1.428.528.6.19 1.145.163 1.577.098.482-.072 1.696-.693 1.935-1.362.24-.67.24-1.244.168-1.362-.073-.119-.262-.191-.55-.335z"/>
+    </svg>
+  </a>
+</div>

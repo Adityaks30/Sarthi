@@ -1,0 +1,8 @@
+/* custom styles for about page */
+.milestones div {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.milestones div:hover {
+  transform: translateY(-4px);
+}

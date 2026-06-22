@@ -1,0 +1,188 @@
+<div class="min-h-screen pt-6">
+
+  <!-- Main Work Area -->
+  <main class="max-w-7xl mx-auto px-12 py-10 space-y-8">
+    <!-- Tab Controls -->
+    <div class="flex gap-2 p-1.5 bg-slate-900/60 border border-white/5 rounded-2xl max-w-md">
+      <button (click)="activeTab = 'stats'" [class.bg-white\/10]="activeTab === 'stats'" class="flex-1 py-3 text-xs font-bold text-center rounded-xl text-white transition-all cursor-pointer">📊 Overview</button>
+      <button (click)="activeTab = 'users'" [class.bg-white\/10]="activeTab === 'users'" class="flex-1 py-3 text-xs font-bold text-center rounded-xl text-white transition-all cursor-pointer">👤 Users</button>
+      <button (click)="activeTab = 'drivers'" [class.bg-white\/10]="activeTab === 'drivers'" class="flex-1 py-3 text-xs font-bold text-center rounded-xl text-white transition-all cursor-pointer">🚘 Drivers</button>
+      <button (click)="activeTab = 'bookings'" [class.bg-white\/10]="activeTab === 'bookings'" class="flex-1 py-3 text-xs font-bold text-center rounded-xl text-white transition-all cursor-pointer">📋 Bookings</button>
+    </div>
+
+    <!-- TAB 1: OVERVIEW & STATS -->
+    <div *ngIf="activeTab === 'stats'" class="space-y-8">
+      <!-- Info Cards Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md">
+          <span class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider">Total Earnings</span>
+          <span class="block text-3xl font-black text-emerald-400 mt-2">₹{{ stats.totalEarnings }}</span>
+        </div>
+        <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md">
+          <span class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider">Active Bookings</span>
+          <span class="block text-3xl font-black text-amber-500 mt-2">{{ stats.activeBookings }}</span>
+        </div>
+        <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md">
+          <span class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider">Registered Drivers</span>
+          <span class="block text-3xl font-black text-white mt-2">{{ stats.totalDrivers }}</span>
+        </div>
+        <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md">
+          <span class="block text-[10px] font-extrabold uppercase text-slate-500 tracking-wider">Open Support Tickets</span>
+          <span class="block text-3xl font-black text-rose-450 mt-2">{{ stats.openTickets }}</span>
+        </div>
+      </div>
+
+      <!-- Analytics Graph and Active Simulator -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Monthly Earnings Graph (CSS bar graph) -->
+        <div class="lg:col-span-2 bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+          <h3 class="text-sm font-extrabold uppercase text-slate-500 tracking-wider">Monthly Revenue Analytics</h3>
+          <div class="h-64 flex items-end gap-4 pt-6 px-4 bg-slate-950/40 border border-white/5 rounded-2xl">
+            <div *ngFor="let item of earningsAnalytics" class="flex-1 flex flex-col items-center gap-2 group">
+              <!-- Animated Bar -->
+              <div class="w-full bg-gradient-to-t from-amber-500 to-amber-400 rounded-t-lg transition-all duration-500" 
+                [style.height.%]="(item.earnings / 45000) * 100">
+                <!-- Tooltip -->
+                <div class="opacity-0 group-hover:opacity-100 absolute -translate-y-8 bg-slate-900 border border-white/10 text-white text-[10px] font-bold px-2 py-1 rounded transition-opacity">
+                  ₹{{ item.earnings }}
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-slate-500">{{ item.month }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Overview info -->
+        <div class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+          <h3 class="text-sm font-extrabold uppercase text-slate-500 tracking-wider">SwiftRide System Overview</h3>
+          <div class="space-y-3.5 text-xs">
+            <div class="flex justify-between items-center p-3 bg-slate-950/40 rounded-xl border border-white/5">
+              <span class="text-slate-500">API Gateway Status</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold uppercase text-[9px]">Active</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-slate-950/40 rounded-xl border border-white/5">
+              <span class="text-slate-500">WebSocket Channels</span>
+              <span class="text-slate-200 font-semibold">2 Active</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-slate-950/40 rounded-xl border border-white/5">
+              <span class="text-slate-500">DB Synchronization</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold uppercase text-[9px]">Enabled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: USERS ROSTER TABLE -->
+    <div *ngIf="activeTab === 'users'" class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+      <h3 class="text-sm font-extrabold uppercase text-slate-500 tracking-wider">Registered System Users</h3>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-white/5 text-slate-500">
+              <th class="py-3 font-extrabold uppercase tracking-wider">Name</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Email</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Phone</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Role</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Loyalty Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users" class="border-b border-white/5 text-slate-300 hover:bg-white/5 transition-colors">
+              <td class="py-4 font-bold text-white">{{ user.name }}</td>
+              <td class="py-4">{{ user.email }}</td>
+              <td class="py-4">{{ user.phone }}</td>
+              <td class="py-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold"
+                  [class.bg-amber-500\/10]="user.role === 'ADMIN'"
+                  [class.text-amber-500]="user.role === 'ADMIN'"
+                  [class.bg-slate-800]="user.role === 'CLIENT'">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td class="py-4 font-bold text-amber-500">{{ user.loyaltyPoints }} pts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: DRIVERS ROSTER TABLE -->
+    <div *ngIf="activeTab === 'drivers'" class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+      <h3 class="text-sm font-extrabold uppercase text-slate-500 tracking-wider">Active Drivers and Vehicles</h3>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-white/5 text-slate-500">
+              <th class="py-3 font-extrabold uppercase tracking-wider">Name</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Rating</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Vehicle Model</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Verification status</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Online Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of drivers" class="border-b border-white/5 text-slate-300 hover:bg-white/5 transition-colors">
+              <td class="py-4 font-bold text-white flex items-center gap-2">
+                <span>👨‍✈️</span> {{ d.user?.name || 'Simulator Driver' }}
+              </td>
+              <td class="py-4 text-amber-500 font-bold">⭐ {{ d.rating }}</td>
+              <td class="py-4">{{ d.vehicle?.make }} {{ d.vehicle?.model }} ({{ d.vehicle?.category }})</td>
+              <td class="py-4">
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-450 font-bold uppercase text-[9px]">Verified</span>
+              </td>
+              <td class="py-4">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold"
+                  [class.bg-emerald-500\/10]="d.isOnline"
+                  [class.text-emerald-400]="d.isOnline"
+                  [class.bg-slate-800]="!d.isOnline">
+                  {{ d.isOnline ? 'Online' : 'Offline' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: BOOKINGS ROSTER TABLE -->
+    <div *ngIf="activeTab === 'bookings'" class="bg-slate-900/40 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+      <h3 class="text-sm font-extrabold uppercase text-slate-500 tracking-wider">All Booking Vouchers</h3>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-white/5 text-slate-500">
+              <th class="py-3 font-extrabold uppercase tracking-wider">Booking ID</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">From Location</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Category</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Fare</th>
+              <th class="py-3 font-extrabold uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let b of bookings" class="border-b border-white/5 text-slate-300 hover:bg-white/5 transition-colors">
+              <td class="py-4 font-mono font-bold text-white text-[10px]">{{ b.id }}</td>
+              <td class="py-4 truncate max-w-xs">{{ b.startAddress }}</td>
+              <td class="py-4 font-bold text-amber-500">{{ b.vehicleCategory }}</td>
+              <td class="py-4 font-bold text-emerald-400">₹{{ b.customFare || 150 }}</td>
+              <td class="py-4">
+                <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold"
+                  [class.bg-emerald-500\/10]="b.status === 'COMPLETED'"
+                  [class.text-emerald-400]="b.status === 'COMPLETED'"
+                  [class.bg-amber-500\/10]="b.status === 'ACCEPTED'"
+                  [class.text-amber-500]="b.status === 'ACCEPTED'"
+                  [class.bg-rose-500\/10]="b.status === 'CANCELLED'"
+                  [class.text-rose-450]="b.status === 'CANCELLED'">
+                  {{ b.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
